@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0302" />
+    <meta name="description" content="Meu App Django PWA" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}" crossorigin="use-credentials" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Portal SEA Eventos">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="{% static 'images-default/logo-sea-fill-192.png' %}" />
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="{% static 'images-default/logo-sea-fill-192.svg' %}" />
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="{% static 'images-default/logo-sea-fill-512.svg' %}" />
+
+    <title>
+      {% block title %}
+        XXIX Colóquio de Usinagem
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}" />
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
+    {% block extra_css %}
+    {% endblock %}
+
+    {% block pre_script %}
+    {% endblock %}
+
+    <style>
+      /* Trava de viewport */
+      html, body {
+        height: 100%;
+        height: 100dvh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      main.pwa-main-wrapper {
+        flex: 1 1 auto;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Cabeçalho -->
+    <header class="site-header">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+          <img src="{% static 'images/images-default/logo-sea-fill-192.svg' %}" alt="PORTAL SEA EVENTOS - SISTEMA DE EVENTOS ACADEMICOS" height="60" />
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+          <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'app_evento:urldis_evento' %}">Início</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mensagens Django -->
+  
+    <!-- Corpo do Site -->
+    <main class="flex-grow-1">
+      {% block content %}
+        <!-- Conteúdo específico de cada página vai aqui -->
+      {% endblock %}
+    </main>
+
+    <!-- Rodapé com Patrocinadores -->
+    <footer class="site-footer mt-auto">
+      <div class="container">
+        <!-- Seção de Patrocinadores -->
+        
+        <div class="row mb-4">
+          <div class="col-12 text-center">
+            <h5 class="text-white mb-4">Patrocinadores</h5>
+          </div>
+        </div>
+
+        <div class="row align-items-center mb-4">
+          
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/sw-registro.js' %}"></script>
+
+    {% block extra_js %}
+
+    {% endblock %}
+
+        
+
+  </body>
+</html>

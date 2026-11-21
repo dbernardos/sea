@@ -1,0 +1,309 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0A0302" />
+    <meta name="description" content="Meu App Django PWA" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}" crossorigin="use-credentials" />
+
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Portal SEA Eventos">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="{% static 'images/images-default/logo-sea-fill-192.png' %}" />
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="{% static 'images/images-default/logo-sea-fill-192.svg' %}" />
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="{% static 'images/images-default/logo-sea-fill-512t.svg' %}" />
+
+   
+    <title>
+      {% block title %}
+        XXIX Colóquio de Usinagem
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}" />
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
+    {% block extra_css %}
+
+    {% endblock %}
+    {% block pre_script %}
+
+    {% endblock %}
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Cabeçalho -->
+    <header class="site-header">
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+
+          <div class="d-flex align-items-center">
+          
+            <a class="navbar-brand me-3" href="{% url 'app_evento:urldis_evento' %}">
+                <img src="{% static 'images/images-default/logo-sea-fill-192.svg' %}" alt=" PORTAL SEA EVENTOS- SISTEMA DE EVENTOS ACADEMICOS" height="60" />
+            </a>
+
+            {% if request.user.is_authenticated %}
+            <div class="nav-greeting">
+              <p class="m-0">Olá, {{ user.first_name.split.0 }}!</p>
+            </div>
+            {% endif %}
+          </div>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+          <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
+              
+              <li class="nav-item">
+                <a class="nav-link rounded-pill px-3 {% if request.resolver_match.url_name == 'urldis_evento' %}active{% endif %}" aria-current="page" href="{% url 'app_evento:urldis_evento' %}">Início</a>
+              </li>
+              
+              {% if request.user.is_authenticated %}
+                {% if request.user.is_staff %}
+                  <li class="nav-item">
+                    <a class="nav-link rounded-pill {% if 'myevento' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'app_evento:urldis_myevento' %}">Meus Eventos</a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link rounded-pill px-3 {% if 'inscricoes' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'app_evento:urlminhas_inscricoes' %}">Inscrições</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link rounded-pill px-3 {% if 'usuario' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'app_login:urlmeu_usuario' %}">Meu Perfil</a>
+                </li>
+
+                <li class="nav-item">
+                  <form method="POST" action="{% url 'app_login:urllogout' %}" autocomplete="off">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link rounded-pill px-3 btn btn-link text-decoration-none">
+                    <i class="bi bi-box-arrow-right"></i> Sair
+                    </button>
+                  </form>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link rounded-pill px-3 {% if 'login' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'app_login:urllogin' %}">
+                    <i class="bi bi-box-arrow-in-right"></i> Entrar
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mensagens Django Globais -->
+    {% if messages %}
+      <div class="container mt-3">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Corpo do Site -->
+    <main class="flex-grow-1">
+      {% block content %}
+        <!-- Conteúdo específico de cada página vai aqui -->
+      {% endblock %}
+    </main>
+
+    <footer class="site-footer mt-auto py-3 text-center ">
+      <div class="container">
+        <div class="row g-3 mb-2"> 
+          <!-- Informações de Contato -->
+          <div class="col-md-4 mb-2 mb-md-0">
+            <h6 class="text-white mb-3">Portal SEA Eventos - Sistema de Eventos Acadêmicos</h6>
+            <p class="text-white-50 small mb-0">
+              <i class="bi bi-geo-alt-fill me-1"></i>IFSC - RAU | <i class="bi bi-calendar-event me-1"></i>2026<br />
+              <i class="bi bi-envelope-fill me-1"></i>contato@portalseaeventos.com.br<br />
+              <i class="bi bi-telephone-fill me-1"></i>(47) 99766-9819
+            </p>
+          </div>
+
+          <!-- Links Rápidos -->
+          <div class="col-md-4 mb-2 mb-md-0">
+            <h6 class="text-white mb-3">Links Rápidos</h6>
+            <ul class="list-unstyled">
+                    <li>
+                      <a href="{% url 'app_evento:urldis_evento' %}" class="text-white-50 text-decoration-none link-light">Inicio</a>
+                    </li>
+              {% if request.user.is_authenticated %}
+                  {% if request.user.is_staff %}
+                    
+                    <li>
+                      <a href="{% url 'app_evento:urldis_myevento' %}" class="text-white-50 text-decoration-none link-light">Meus Eventos</a>
+                    </li>
+                    <li>
+                      <a href="{% url 'app_evento:urlcad_evento' %}" class="text-white-50 text-decoration-none link-light">Novo Evento</a>
+                    </li>
+
+                  {% endif %}
+                    
+                    <li>
+                      <a href="{% url 'app_evento:urlminhas_inscricoes' %}" class="text-white-50 text-decoration-none link-light">Inscrições</a>
+                    </li>
+
+                    <li>
+                      <a href="{% url 'app_login:urlmeu_usuario' %}" class="text-white-50 text-decoration-none link-light">Meu Perfil</a>
+                    </li>
+
+                    <li>
+                      <form method="POST" action="{% url 'app_login:urllogout' %}" autocomplete="off">
+                        {% csrf_token %}
+                        <li>
+                          <button type="submit" class="text-white-50 btn btn-link text-decoration-none link-light">Sair</button>
+                        </li>
+                      </form>
+                    <li>                 
+              {% else %}  
+                <li>
+                  <a href="{% url 'app_login:urllogin' %}" class="text-white-50 text-decoration-none link-light">Entrar</a>
+                 </li>
+
+                <li>
+                  <a href="{% url 'app_evento:urlpwa_home' %}" class="text-white-50 text-decoration-none link-light">Encontrar Evento</a>
+                </li>
+              {% endif %}
+
+            </ul>
+          </div>
+
+          <!-- Redes Sociais -->
+          <div class="col-md-4" nav-bar>
+            <h6 class="text-white mb-3">Redes Sociais</h6>
+            <div class="social-links d-flex justify-content-center align-items-center gap-3">
+              <a href="https://www.facebook.com/portalseaeventos/" class="text-white nav-link rounded-pill px-3" target="_blank"><i class="bi bi-facebook fs-6"></i></a>
+              <a href="https://www.instagram.com/portalseaeventos/" class="text-white nav-link rounded-pill px-3" target="_blank"><i class="bi bi-instagram fs-6"></i></a>
+              <a href="https://www.youtube.com/@portalseaeventos/" class="text-white nav-link rounded-pill px-3" target="_blank"><i class="bi bi-youtube fs-6"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <hr class="border-secondary my-2" />
+
+        <!-- Copyright -->
+        <div class="row">
+          <div class="col-12">
+            <p class="text-white-50 text-secondary small mb-0">
+              &copy;{% now 'Y' %} Portal SEA Eventos. Sistema de Eventos Acadêmicos. [Projeto Acadêmico - Sem Fins Lucrativos]
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+      
+   
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'js/sw-registro.js' %}"></script>
+    
+    {% if user.is_authenticated %}
+      <script>
+          const tempoLimite = {{ SESSION_COOKIE_AGE }} * 1000; 
+
+          setTimeout(function() {
+              alert("Sua sessão expirou após inatividade. Faça login novamente.");
+              window.location.replace("{% url 'app_login:urllogin' %}?expirado=1&t=" + new Date().getTime());
+          }, tempoLimite);
+      </script>
+    {% endif %}
+
+
+    <script>
+      //procura campos obrigatórios para por asterisco
+      document.querySelectorAll('input[required], select[required], textarea[required]').forEach((input) => {
+        // Procura pelo label associado ao ID do campo obrigatório
+        const label = document.querySelector(`label[for="${input.id}"]`)
+        if (label) {
+          label.classList.add('required')
+        }
+      })
+    </script>
+
+    <script>
+       document.querySelectorAll('.nav-link').forEach(link => {
+    
+        if (window.location.pathname === link.pathname) {
+              link.classList.add('active');
+          }
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('input[type="password"]').forEach((input) => {
+          const group = document.createElement('div');
+          group.className = 'input-group';
+          input.parentNode.insertBefore(group, input);
+          group.appendChild(input);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn btn-outline-secondary';
+          btn.innerHTML = '<i class="bi bi-eye"></i>';
+          btn.onclick = () => {
+            const oculto = input.type === 'password';
+            input.type = oculto ? 'text' : 'password';
+            btn.innerHTML = `<i class="bi bi-eye${oculto ? '-slash' : ''}"></i>`;
+          };
+          group.appendChild(btn);
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Máscara de CPF: 000.000.000-00
+        document.querySelectorAll('input[name$="cpf"]').forEach((input) => {
+          input.maxLength = 14;
+          input.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = v;
+          });
+        });
+
+        // Máscara de Telefone: (00) 00000-0000 ou (00) 0000-0000
+        document.querySelectorAll('input[name$="telefone"]').forEach((input) => {
+          input.maxLength = 15;
+          input.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 10) {
+              // Celular (11 dígitos)
+              v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (v.length > 6) {
+              // Fixo (10 dígitos) ou digitando
+              v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (v.length > 2) {
+              v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            } else if (v.length > 0) {
+              v = v.replace(/^(\d*)/, '($1');
+            }
+            e.target.value = v;
+          });
+        });
+      });
+    </script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

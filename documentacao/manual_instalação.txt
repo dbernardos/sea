@@ -1,0 +1,40 @@
+Manual para Instalação.
+
+python -m venv venv 
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser 
+
+venv/Scripts/activate.ps1  
+
+pip install -r requirements.txt 
+
+python popular_banco.py
+
+python manage.py collectstatic
+
+python manage.py runserver 
+
+python manage.py runserver 8080
+
+------ 
+
+se der erro em albumas biblioteca(bootstrap, pwa, django extensions e smart-select), 
+executar comando abaixo:
+
+pip install django-bootstrap-v5 
+pip install django-pwa 
+pip install django-extensions 
+pip install django-smart-selects 
+pip install uuid6 
+pip install pillow
+
+
+
+pip install --upgrade django (caso de algum erro no django admin)
+
+
+// Remover algo do cache do GIT
+git rm --cached caminho/para/o/arquivo.css
+git add .
+git commit -m "Remove arquivos estáticos do cache do Git"
+git push origin nome-da-branch
